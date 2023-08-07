@@ -3,6 +3,7 @@
  */
 import { Box, Button, Modal, Stack, TextField } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
+import { LoadingButton } from '@mui/lab';
 
 /**
  * Internal dependencies
@@ -49,7 +50,9 @@ const ProductModal = (props) => {
     const {isDirty, isValid, errors} = form.formState;
 
     const onSubmit = (data) => {
-        mutation.mutateAsync(data);
+        mutation.mutateAsync(data, {
+            onSuccess: onClose,
+        });
     }
 
     return (
@@ -97,11 +100,12 @@ const ProductModal = (props) => {
               <Stack justifyContent="flex-end" spacing={2} direction="row" sx={{pt: 3, ml: 'auto'}}>
                   <Button variant="text" onClick={onClose}>Cancel</Button>
 
-                  <Button
+                  <LoadingButton
                     type="submit"
                     variant="contained"
                     disabled={!isDirty || !isValid}
-                  >Submit</Button>
+                    loading={mutation.isMutating}
+                  >Submit</LoadingButton>
               </Stack>
           </Box>
       </Modal>
