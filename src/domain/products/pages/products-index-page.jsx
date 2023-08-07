@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { Stack } from "@mui/material";
+import { CircularProgress, Stack } from "@mui/material";
 
 /**
  * Internal dependencies
@@ -12,13 +12,17 @@ import useToggle from "@/hooks/use-toggle.js";
 import ProductModal from "@/domain/products/components/product-modal/product-modal.jsx";
 
 const ProductsIndexPage = () => {
-    const { data: products = [] } = useProductsIndexQuery();
+    const { data: products = [], isLoading } = useProductsIndexQuery();
 
     const {
         on: isProductModalOpen,
         setOn: openProductModal,
         setOff: closeProductModal
     } = useToggle();
+
+    if (isLoading) {
+        return <CircularProgress />;
+    }
 
     return (
       <>

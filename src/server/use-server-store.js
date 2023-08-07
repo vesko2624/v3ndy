@@ -9,9 +9,15 @@ const useServerStore = create(
   persist(
       immer((set, state) => ({
           products: [],
+          account: { balance: 0 },
           addProduct: (product) => {
               set((state) => {
                   state.products = [...state.products, product];
+              });
+          },
+          addMoney: (money) => {
+              set((state) => {
+                  state.account.balance = state.account.balance + money;
               });
           },
           updateProduct: (product) => {

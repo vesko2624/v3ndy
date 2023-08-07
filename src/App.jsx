@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Navigate, Route, Routes } from "react-router-dom";
 import {
     AppBar,
     Box,
@@ -24,6 +24,7 @@ import MenuIcon from '@mui/icons-material/Menu';
  */
 import useToggle from "@/hooks/use-toggle.js";
 import ProductsIndexPage from "@/domain/products/pages/products-index-page.jsx";
+import VendingIndexPage from "@/domain/vending/pages/vending-index-page.jsx";
 
 const App = () => {
     const {on: mobileOpen, toggle: toggleMobile} = useToggle();
@@ -44,14 +45,19 @@ const App = () => {
                   </IconButton>
 
                   <Typography
+                    component={Link}
+                    to="/vending"
                     variant="h6"
-                    component="div"
-                    sx={{flexGrow: 1, textAlign: 'left', display: {xs: 'none', sm: 'block'}}}
+                    sx={{ color: 'white', flexGrow: 1, textAlign: 'left', display: {xs: 'none', sm: 'block'}}}
                   >
                       V3NDY
                   </Typography>
 
                   <Box sx={{display: {xs: 'none', sm: 'block'}}}>
+                      <Button component={Link} to="/vending" sx={{color: '#fff'}}>
+                          Vending
+                      </Button>
+
                       <Button component={Link} to="/products" sx={{color: '#fff'}}>
                           Products
                       </Button>
@@ -73,13 +79,19 @@ const App = () => {
                 }}
               >
                   <Box onClick={toggleMobile} sx={{textAlign: 'center'}}>
-                      <Typography variant="h6" sx={{my: 2}}>
+                      <Typography component={Link} to="/vending" variant="h6" sx={{my: 2}}>
                           V3NDY
                       </Typography>
 
                       <Divider/>
 
                       <List>
+                          <ListItem disablePadding>
+                              <ListItemButton selected sx={{textAlign: 'center'}}>
+                                  <ListItemText component={Link} primary="Vending" to="/vending"/>
+                              </ListItemButton>
+                          </ListItem>
+
                           <ListItem disablePadding>
                               <ListItemButton selected sx={{textAlign: 'center'}}>
                                   <ListItemText component={Link} primary="Products" to="/products"/>
@@ -94,6 +106,10 @@ const App = () => {
               <Toolbar/>
 
               <Routes>
+                  <Route path="/" element={<Navigate replace to="/vending" />}/>
+
+                  <Route path="/vending" Component={VendingIndexPage}/>
+
                   <Route path="/products" Component={ProductsIndexPage}/>
               </Routes>
           </Box>
