@@ -15,6 +15,7 @@ const useServerMutation = (callback, selector) => {
     const [response, setResponse] = useState();
     const [isMutating, setIsMutating] = useState(false);
     const [requestData, setRequestData] = useState([]);
+    const [options, setOptions] = useState({});
 
     useEffect(() => {
         if (!isMutating) {
@@ -22,18 +23,21 @@ const useServerMutation = (callback, selector) => {
         }
 
         const timeout = setTimeout(() => {
-            setResponse(callback(store, ...requestData))
+            const response = callback(store, requestData);
+            setResponse(response)
             setIsMutating(false);
+            options?.onSuccess?.(response);
         }, DELAY);
 
         return () => {
             clearTimeout(timeout);
         }
-    }, [store, isMutating, callback, requestData]);
+    }, [store, isMutating, callback, requestData, options]);
 
-    const mutateAsync = (...data) => {
+    const mutateAsync = (data, options = {}) => {
         setIsMutating(true);
         setRequestData(data);
+        setOptions(options)
     }
 
     return { data: response, mutateAsync, isMutating }
