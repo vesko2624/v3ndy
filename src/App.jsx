@@ -88,13 +88,13 @@ const App = () => {
                       <List>
                           <ListItem disablePadding>
                               <ListItemButton selected sx={{textAlign: 'center'}}>
-                                  <ListItemText component={Link} primary="Vending" to="/vending"/>
+                                  <ListItemText as={Link} primary="Vending" to="/vending"/>
                               </ListItemButton>
                           </ListItem>
 
                           <ListItem disablePadding>
                               <ListItemButton selected sx={{textAlign: 'center'}}>
-                                  <ListItemText component={Link} primary="Products" to="/products"/>
+                                  <ListItemText as={Link} primary="Products" to="/products"/>
                               </ListItemButton>
                           </ListItem>
                       </List>

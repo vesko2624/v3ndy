@@ -7,7 +7,7 @@ const useProductsItemsDestroyMutation = (product) => {
     return useServerMutation((store) => {
         const serverProduct = store.findProduct(product.id);
 
-        if (serverProduct.quantity === 1) {
+        if (serverProduct.quantity <= 1) {
             return store.removeProduct(product.id);
         }
 

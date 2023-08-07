@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 const productFormSchema = yupResolver(
   Y.object().shape({
       amount: Y.number()
+        .positive('The amount field must be a positive number.')
         .required('The amount field is required.')
         .typeError('The amount field must be a number.'),
   })

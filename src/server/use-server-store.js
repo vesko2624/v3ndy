@@ -15,6 +15,11 @@ const useServerStore = create(
                   state.products = [...state.products, product];
               });
           },
+          subMoney: (money) => {
+              set((state) => {
+                  state.account.balance = state.account.balance - money;
+              });
+          },
           addMoney: (money) => {
               set((state) => {
                   state.account.balance = state.account.balance + money;
