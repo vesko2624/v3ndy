@@ -9,6 +9,7 @@ const useProductsStoreMutation = () => {
         return store.addProduct({
             id: getAvailableId(store.products),
             name: product.name,
+            price: product.price,
             quantity: 1,
         });
     }, (store) => ({

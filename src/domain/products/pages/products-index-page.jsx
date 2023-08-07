@@ -7,30 +7,35 @@ import { Stack } from "@mui/material";
  * Internal dependencies
  */
 import useProductsIndexQuery from "@/server/products/use-products-index-query.js";
-import useProductsStoreMutation from "@/server/products/use-products-store-mutation.js";
 import ProductCard from "@/domain/products/components/product-card/product-card.jsx";
+import useToggle from "@/hooks/use-toggle.js";
+import ProductModal from "@/domain/products/components/product-modal/product-modal.jsx";
 
 const ProductsIndexPage = () => {
     const { data: products = [] } = useProductsIndexQuery();
-    const productsStoreMutation = useProductsStoreMutation();
+
+    const {
+        on: isProductModalOpen,
+        setOn: openProductModal,
+        setOff: closeProductModal
+    } = useToggle();
 
     return (
-      <Stack direction="column" spacing={2}>
-          <button
-            type="button"
-            onClick={() => {
-                productsStoreMutation.mutateAsync({
-                    name: 'ivan',
-                })
-            }}
-          >
-              Add Product
-          </button>
+      <>
+          <Stack direction="column" spacing={2}>
+              <button type="button" onClick={openProductModal}>
+                  Add Product
+              </button>
 
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product}/>
-          ))}
-      </Stack>
+              {products.map((product) => (
+                <ProductCard key={product.id} product={product}/>
+              ))}
+          </Stack>
+
+          {isProductModalOpen && (
+            <ProductModal onClose={closeProductModal} />
+          )}
+      </>
     )
 }
 

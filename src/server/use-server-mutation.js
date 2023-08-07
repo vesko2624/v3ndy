@@ -36,7 +36,7 @@ const useServerMutation = (callback, selector) => {
         setRequestData(data);
     }
 
-    return { data: response, mutateAsync }
+    return { data: response, mutateAsync, isMutating }
 }
 
 export default useServerMutation;

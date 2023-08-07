@@ -3,7 +3,7 @@
  */
 import useServerMutation from "@/server/use-server-mutation.js";
 
-const useProductsDestroyMutation = (product) => {
+const useProductsItemsDestroyMutation = (product) => {
     return useServerMutation((store) => {
         const serverProduct = store.findProduct(product.id);
 
@@ -23,4 +23,4 @@ const useProductsDestroyMutation = (product) => {
     }));
 }
 
-export default useProductsDestroyMutation;
+export default useProductsItemsDestroyMutation;

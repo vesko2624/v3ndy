@@ -3,13 +3,14 @@
  */
 import useServerMutation from "@/server/use-server-mutation.js";
 
-const useProductsItemsStoreMutation = (product) => {
-    return useServerMutation((store) => {
+const useProductsUpdateMutation = (product) => {
+    return useServerMutation((store, data) => {
         const serverProduct = store.findProduct(product.id);
 
         return store.updateProduct({
             ...serverProduct,
-            quantity: product.quantity + 1,
+            name: data.name,
+            price: data.price,
         });
     }, (store) => ({
         findProduct: store.findProduct,
@@ -17,4 +18,4 @@ const useProductsItemsStoreMutation = (product) => {
     }));
 }
 
-export default useProductsItemsStoreMutation;
+export default useProductsUpdateMutation;
