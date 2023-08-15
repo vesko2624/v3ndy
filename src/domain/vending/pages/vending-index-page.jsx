@@ -146,10 +146,11 @@ const VendingIndexPage = () => {
                                               productsBuyMutation.mutateAsync(product.id, {
                                                   onSuccess() {
                                                       queryClient.invalidateQueries(['products/index'])
-                                                      queryClient.invalidateQueries(['account/balance/show'])
-                                                        .then(() => {
-                                                            setInsertedMoney((oldMoney) => Math.abs(oldMoney - product.price));
-                                                        })
+
+                                                      setInsertedMoney((oldMoney) => Math.abs(oldMoney - product.price));
+                                                      queryClient.setQueriesData(['account/balance/show'], (currentMoney) => {
+                                                          return currentMoney - product.price;
+                                                      })
                                                   }
                                               });
                                           }}
