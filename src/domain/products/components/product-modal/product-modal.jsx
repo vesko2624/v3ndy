@@ -3,14 +3,15 @@
  */
 import { Box, Button, Modal, Stack, TextField } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
+import { useQueryClient } from "@tanstack/react-query";
 import { LoadingButton } from '@mui/lab';
 
 /**
  * Internal dependencies
  */
 import productFormSchema from "@/domain/products/components/product-modal/product-modal.schema.js";
-import useProductsStoreMutation from "@/server/products/use-products-store-mutation.js";
-import useProductsUpdateMutation from "@/server/products/use-products-update-mutation.js";
+import useProductsStoreMutation from "@/data/products/use-products-store-mutation.js";
+import useProductsUpdateMutation from "@/data/products/use-products-update-mutation.js";
 
 
 const style = {
@@ -33,8 +34,9 @@ const style = {
 const ProductModal = (props) => {
     const {product, onClose} = props;
 
+    const queryClient = useQueryClient();
     const productsStoreMutation = useProductsStoreMutation();
-    const productsUpdateMutation = useProductsUpdateMutation(product);
+    const productsUpdateMutation = useProductsUpdateMutation(product?.id);
 
     const isEdit = !!product;
     const mutation = isEdit ? productsUpdateMutation : productsStoreMutation;
@@ -48,11 +50,15 @@ const ProductModal = (props) => {
         }
     });
 
-    const {isDirty, isValid, errors} = form.formState;
+    const {isSubmitting, isDirty, isValid, errors} = form.formState;
 
-    const onSubmit = (data) => {
-        mutation.mutateAsync(data, {
-            onSuccess: onClose,
+    const onSubmit = async (data) => {
+        await mutation.mutateAsync(data, {
+            onSuccess() {
+                queryClient.invalidateQueries(['products/index']);
+
+                onClose();
+            },
         });
     }
 
@@ -105,7 +111,7 @@ const ProductModal = (props) => {
                     type="submit"
                     variant="contained"
                     disabled={!isDirty || !isValid}
-                    loading={mutation.isMutating}
+                    loading={isSubmitting}
                   >Submit</LoadingButton>
               </Stack>
           </Box>

@@ -4,17 +4,18 @@
 import { useState } from "react";
 import { Box, Button, CircularProgress, Grid, IconButton, Paper, Stack, styled, Typography } from "@mui/material";
 import { ShoppingCartCheckout } from "@mui/icons-material";
+import { useQueryClient } from "@tanstack/react-query";
 
 /**
  * Internal dependencies
  */
-import useProductsIndexQuery from "@/server/products/use-products-index-query.js";
-import useAccountBalanceShowQuery from "@/server/account/use-account-balance-show-query.js";
+import useProductsIndexQuery from "@/data/products/use-products-index-query.js";
+import useAccountBalanceShowQuery from "@/data/account/balance/use-account-balance-show-query.js";
 import useToggle from "@/hooks/use-toggle.js";
 import AccountAddMoneyModal from "@/domain/account/account-add-money-modal/account-add-money-modal.jsx";
 import InsufficientBalance from "@/domain/account/insufficient-balance/insufficient-balance.jsx";
 import InsufficientQuantity from "@/domain/products/components/insufficient-quantity/insufficient-quantity.jsx";
-import useProductsBuyMutation from "@/server/products/use-products-buy-mutation.js";
+import useProductsBuyMutation from "@/data/products/use-products-buy-mutation.js";
 
 const Item = styled(Paper)(({theme}) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -32,6 +33,7 @@ const boxStyle = {
 const availableCoins = [0.01, 0.02, 0.05, 0.10, 0.20, 0.50, 1.00, 2.00];
 
 const VendingIndexPage = () => {
+    const queryClient = useQueryClient();
     const {data: products = [], ...productsIndexQuery} = useProductsIndexQuery();
     const {data: accountBalance = 0, ...accountBalanceShowQuery} = useAccountBalanceShowQuery();
     const productsBuyMutation = useProductsBuyMutation();
@@ -143,7 +145,11 @@ const VendingIndexPage = () => {
 
                                               productsBuyMutation.mutateAsync(product.id, {
                                                   onSuccess() {
-                                                      setInsertedMoney((oldMoney) => Math.abs(oldMoney - product.price));
+                                                      queryClient.invalidateQueries(['products/index'])
+                                                      queryClient.invalidateQueries(['account/balance/show'])
+                                                        .then(() => {
+                                                            setInsertedMoney((oldMoney) => Math.abs(oldMoney - product.price));
+                                                        })
                                                   }
                                               });
                                           }}

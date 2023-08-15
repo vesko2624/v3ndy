@@ -3,12 +3,13 @@
  */
 import { Box, Button, Modal, Stack, TextField } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
+import { useQueryClient } from "@tanstack/react-query";
 import { LoadingButton } from '@mui/lab';
 
 /**
  * Internal dependencies
  */
-import useAccountBalanceUpdateMutation from "@/server/account/use-account-balance-update-mutation.js";
+import useAccountBalanceUpdateMutation from "@/data/account/balance/use-account-balance-update-mutation.js";
 import accountAddMoneyModalSchema from "@/domain/account/account-add-money-modal/account-add-money-modal.schema.js";
 
 
@@ -32,6 +33,7 @@ const style = {
 const AccountAddMoneyModal = (props) => {
     const {onClose} = props;
 
+    const queryClient = useQueryClient();
     const accountBalanceUpdateMutation = useAccountBalanceUpdateMutation();
 
     const form = useForm({
@@ -46,7 +48,10 @@ const AccountAddMoneyModal = (props) => {
 
     const onSubmit = (data) => {
         accountBalanceUpdateMutation.mutateAsync(data, {
-            onSuccess: onClose,
+            onSuccess() {
+                queryClient.invalidateQueries(['account/balance/show']);
+                onClose();
+            },
         });
     }
 

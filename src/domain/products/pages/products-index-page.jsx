@@ -6,7 +6,7 @@ import { CircularProgress, Stack } from "@mui/material";
 /**
  * Internal dependencies
  */
-import useProductsIndexQuery from "@/server/products/use-products-index-query.js";
+import useProductsIndexQuery from "@/data/products/use-products-index-query.js";
 import ProductCard from "@/domain/products/components/product-card/product-card.jsx";
 import useToggle from "@/hooks/use-toggle.js";
 import ProductModal from "@/domain/products/components/product-modal/product-modal.jsx";

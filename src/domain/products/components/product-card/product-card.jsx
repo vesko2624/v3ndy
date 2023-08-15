@@ -2,20 +2,23 @@
  * External dependencies
  */
 import { Button, ButtonGroup, Card, CardActions, CardContent, IconButton, Stack, Typography } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
 import { Edit } from '@mui/icons-material';
 
 /**
  * Internal dependencies
  */
-import useProductsItemsStoreMutation from "@/server/products/use-products-items-store-mutation.js";
-import useProductsItemsDestroyMutation from "@/server/products/use-products-items-destroy-mutation.js";
+import useProductsItemsStoreMutation from "@/data/products/items/use-products-items-store-mutation.js";
+import useProductsItemsDestroyMutation from "@/data/products/items/use-products-items-destroy-mutation.js";
 import ProductModal from "@/domain/products/components/product-modal/product-modal.jsx";
 import useToggle from "@/hooks/use-toggle.js";
 
 const ProductCard = (props) => {
     const { product } = props;
-    const productsItemsStoreMutation = useProductsItemsStoreMutation(product);
-    const productsItemsDestroyMutation = useProductsItemsDestroyMutation(product);
+
+    const queryClient = useQueryClient();
+    const productsItemsStoreMutation = useProductsItemsStoreMutation(product.id);
+    const productsItemsDestroyMutation = useProductsItemsDestroyMutation(product.id);
 
     const {
         on: isProductModalOpen,
@@ -45,14 +48,22 @@ const ProductCard = (props) => {
                           <Button
                             type="button"
                             onClick={() => {
-                                productsItemsDestroyMutation.mutateAsync();
+                                productsItemsDestroyMutation.mutateAsync(null, {
+                                    onSuccess() {
+                                        queryClient.invalidateQueries(['products/index']);
+                                    }
+                                });
                             }}
                           >-</Button>
 
                           <Button
                             type="button"
                             onClick={() => {
-                                productsItemsStoreMutation.mutateAsync()
+                                productsItemsStoreMutation.mutateAsync(null, {
+                                    onSuccess() {
+                                        queryClient.invalidateQueries(['products/index']);
+                                    }
+                                })
                             }}
                           >+</Button>
                       </ButtonGroup>
