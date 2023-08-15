@@ -97,7 +97,7 @@ const VendingIndexPage = () => {
                       <Stack direction="column">
                           <Typography>Insert Coins:</Typography>
 
-                          <Grid container rowSpacing={2} columnSpacing={10}>
+                          <Grid container rowSpacing={2} columnSpacing={10} sx={{ width: '100%' }}>
                               {availableCoins.map((coin) => (
                                 <Grid key={coin} item xs={1}>
                                     <Item
