@@ -87,7 +87,7 @@ const AccountAddMoneyModal = (props) => {
                     type="submit"
                     variant="contained"
                     disabled={!isDirty || !isValid}
-                    loading={accountBalanceUpdateMutation.isMutating}
+                    loading={accountBalanceUpdateMutation.isLoading}
                   >Submit</LoadingButton>
               </Stack>
           </Box>

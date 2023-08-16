@@ -66,7 +66,7 @@ const VendingIndexPage = () => {
           <Stack direction="column" spacing={2}>
               <Box sx={boxStyle}>
                   <Stack direction="column" spacing={4}>
-                      {productsBuyMutation.isMutating ? (
+                      {productsBuyMutation.isLoading ? (
                         <CircularProgress style={{ margin: 'auto', width: 48, height: 48 }}/>
                       ) : (
                           <Stack direction="row" justifyContent="space-between">
@@ -129,7 +129,7 @@ const VendingIndexPage = () => {
 
                                         <IconButton
                                           size="small"
-                                          disabled={productsBuyMutation.isMutating}
+                                          disabled={productsBuyMutation.isLoading}
                                           onClick={() => {
                                               if (parseFloat(insertedMoney.toFixed(2)) < parseFloat(product.price.toFixed(2))) {
                                                   openInsufficientBalanceModal();
